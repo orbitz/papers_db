@@ -5,6 +5,9 @@ set -e
 LOCAL_DIR="$(dirname $0)"
 MD5SUM_CMD="md5sum"
 
+if ! echo "foo" | $MD5SUM_CMD >/dev/null 2>&1; then
+    MD5SUM_CMD=md5
+fi
 
 source "$LOCAL_DIR/papers_db.sh"
 
