@@ -1,8 +1,0 @@
-#!/bin/sh
-
-PAPER=$1
-
-MD5SUM=`md5 $PAPER | awk '{ print $NF }'`
-
-sqlite3 papers.db "DELETE FROM tags WHERE doc_id = \"$MD5SUM\""
-sqlite3 papers.db "DELETE FROM papers WHERE doc_id = \"$MD5SUM\""

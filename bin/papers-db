@@ -1,0 +1,61 @@
+#! /usr/bin/env bash
+
+set -e
+
+LOCAL_DIR="$(dirname $0)"
+MD5SUM_CMD="md5sum"
+
+
+source "$LOCAL_DIR/papers_db.sh"
+
+case "$1" in
+    "init")
+	init
+	;;
+    "all")
+	all_papers
+	;;
+    "add")
+	shift
+	paper="$1"
+	add "$paper"
+	shift
+	for tag in "$@"; do
+	    tag_add "$paper" "$tag"
+	done
+	;;
+    "add-from-url")
+	shift
+	tmpdir=$(mktemp -d --tmpdir)
+	pushd "$tmpdir"
+	wget "$1"
+	fname="$(ls)"
+	popd
+	if [ -f "$tmpdir/$fname" ]; then
+	    mkdir -p Papers
+	    mv "$tmpdir/$fname" "Papers/$fname"
+	    add "Papers/$fname"
+	    shift
+	    for tag in "$@"; do
+		tag_add "Papers/$fname" "$tag"
+	    done
+	else
+	    echo "Failed to download"
+	    exit 1
+	fi
+	rm -rf "$tmpdir"
+	;;
+    "tag-show")
+	tag_show "$2"
+	;;
+    "tag-search")
+	shift
+	tag_search "$#" "$@"
+	;;
+    "tag-all")
+	tag_all
+	;;
+    *)
+	echo "Unknown command: $1"
+	exit 1
+esac

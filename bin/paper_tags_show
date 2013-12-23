@@ -1,9 +1,0 @@
-#!/bin/sh
-
-PAPER=$1
-
-[ -f "$PAPER" ] || exit 1
-
-MD5SUM=`md5 $PAPER | awk '{ print $NF }'`
-
-sqlite3 papers.db "SELECT tag FROM tags WHERE doc_id = \"$MD5SUM\""
