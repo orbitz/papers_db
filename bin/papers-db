@@ -26,7 +26,7 @@ case "$1" in
 	;;
     "add-from-url")
 	shift
-	tmpdir=$(mktemp -d --tmpdir)
+	tmpdir=$(mktemp -d)
 	pushd "$tmpdir"
 	wget "$1"
 	fname="$(ls)"
