@@ -59,6 +59,7 @@ case "$1" in
 	tag_all
 	;;
     "tag-add")
+	shift
 	paper="$1"
 	shift
 	for tag in "$@"; do
